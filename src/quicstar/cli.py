@@ -4,29 +4,31 @@ import argparse
 from pathlib import Path
 
 from .config import QuicstarConfig, load_config
+from .i18n import get_translator
 from .server import serve_app
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    t, _ = get_translator()
     parser = argparse.ArgumentParser(
         prog="quicstar",
-        description="Leichter HTTP/3-Server mit TOML-Konfiguration und Traefik-kompatiblen Defaults.",
+        description=t("cli.description"),
     )
-    parser.add_argument("--config", type=Path, help="Pfad zu einer TOML-Datei (Standalone-Modus)")
-    parser.add_argument("--host", help="Host/IP fuer den HTTP-Bind")
-    parser.add_argument("--port", type=int, help="Port fuer den HTTP-Bind")
-    parser.add_argument("--app", help="ASGI-Pfad, z. B. myproject.asgi:application")
+    parser.add_argument("--config", type=Path, help="Path to a TOML file (standalone mode)")
+    parser.add_argument("--host", help=t("cli.host"))
+    parser.add_argument("--port", type=int, help=t("cli.port"))
+    parser.add_argument("--app", help=t("cli.app"))
     parser.add_argument(
         "--protocol",
         choices=["auto", "http3", "http1"],
-        help="Explizite Protokollwahl (HTTP/3, nur HTTP/1.1 oder automatisch)",
+        help=t("cli.protocol"),
     )
-    parser.add_argument("--workers", type=int, help="Anzahl der Worker-Prozesse")
-    parser.add_argument("--no-access-log", action="store_true", help="Access-Logs deaktivieren")
-    parser.add_argument("--log-level", choices=["debug", "info", "warning", "error", "critical"], help="Log-Level")
-    parser.add_argument("--certfile", type=Path, help="TLS Zertifikat (erforderlich fuer HTTP/3)")
-    parser.add_argument("--keyfile", type=Path, help="TLS Key (erforderlich fuer HTTP/3)")
-    parser.add_argument("--quic-bind", help="Optionaler QUIC-Bind, z. B. '0.0.0.0:443'")
+    parser.add_argument("--workers", type=int, help=t("cli.workers"))
+    parser.add_argument("--no-access-log", action="store_true", help=t("cli.no_access_log"))
+    parser.add_argument("--log-level", choices=["debug", "info", "warning", "error", "critical"], help=t("cli.log_level"))
+    parser.add_argument("--certfile", type=Path, help=t("cli.certfile"))
+    parser.add_argument("--keyfile", type=Path, help=t("cli.keyfile"))
+    parser.add_argument("--quic-bind", help=t("cli.quic_bind"))
     return parser
 
 

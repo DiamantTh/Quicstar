@@ -11,6 +11,8 @@ if sys.version_info >= (3, 11):
 else:
     import tomli as tomllib
 
+from .i18n import get_translator
+
 
 DEFAULT_HOST = "::1"
 DEFAULT_PORT = 8000
@@ -19,13 +21,7 @@ DEFAULT_APP = "quicstar.server:default_app"
 
 @dataclass
 class QuicstarConfig:
-    """Konfiguration für den Quicstar-Server.
-
-    Die Konfiguration kann aus einer TOML-Datei, über Umgebungsvariablen
-    oder direkt per CLI gesetzt werden. Für Framework-Integrationen (z. B.
-    Django) sollte die jeweilige native Konfiguration verwendet werden, der
-    Server nutzt dann lediglich den ASGI-Pfad.
-    """
+    """Configuration for the Quicstar server."""
 
     host: str = DEFAULT_HOST
     port: int = DEFAULT_PORT
@@ -78,15 +74,16 @@ class QuicstarConfig:
         return normalized
 
     def ensure_valid(self) -> None:
+        t, _ = get_translator()
         valid_modes = {"auto", "http3", "http1"}
         if self.protocol_mode not in valid_modes:
-            raise ValueError(f"protocol_mode muss eine dieser Optionen sein: {', '.join(valid_modes)}")
+            raise ValueError(t("error.protocol_mode"))
         if self.protocol_mode == "http3" and not self.certfile:
-            raise ValueError("Für HTTP/3 muss ein TLS-Zertifikat (certfile) angegeben werden.")
+            raise ValueError(t("error.http3_cert"))
         if self.keyfile and not self.certfile:
-            raise ValueError("Wenn ein keyfile gesetzt ist, muss auch ein certfile angegeben werden.")
+            raise ValueError(t("error.key_without_cert"))
         if self.certfile and not self.keyfile:
-            raise ValueError("Wenn ein certfile gesetzt ist, muss auch ein keyfile angegeben werden.")
+            raise ValueError(t("error.cert_without_key"))
 
 
 def load_config(config_path: Optional[str]) -> QuicstarConfig:

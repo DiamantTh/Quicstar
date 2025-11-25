@@ -1,55 +1,55 @@
 # Quicstar
 
-Quicstar ist ein leichtgewichtiges, per `pip` installierbares Python-Paket mit integriertem Webserver. Der Server spricht moderne Protokolle (HTTP/1.1, HTTP/2 und HTTP/3/QUIC), lässt sich in Docker- und Traefik-Setups betreiben und kann sowohl standalone als auch mit Frameworks wie Django genutzt werden.
+Quicstar is a lightweight Python package with a built-in web server that ships as a simple `pip` install. The server speaks modern protocols (HTTP/1.1, HTTP/2, HTTP/3/QUIC), runs comfortably behind Traefik or inside Docker, and can host standalone apps or framework ASGI apps such as Django.
 
 ## Features
-- **HTTP/3 & QUIC** inklusive ALPN; reiner HTTP/1.1-Modus konfigurierbar.
-- **Framework-kompatibel:** übernimmt beliebige ASGI-Apps (z. B. `myproject.asgi:application`).
-- **Multi-Core ready:** Worker-Anzahl konfigurierbar, standardmäßig entsprechend CPU-Kernen.
-- **Containerfreundlich:** liest Environment-Variablen und TOML-Configs; solide Defaults für Traefik/Docker.
-- **TLS bereit:** Zertifikat/Key können gesetzt werden; für HTTP/3 zwingend notwendig.
-- **Geringer Overhead:** basiert auf Hypercorn, beherrscht auch HTTP/2 und WebSockets.
+- **HTTP/3 & QUIC** with ALPN; configurable HTTP/1.1-only mode.
+- **Framework-friendly:** serves any ASGI app (for example `myproject.asgi:application`).
+- **Multi-core ready:** worker count configurable; defaults to CPU core count.
+- **Container-ready:** reads environment variables and TOML configs; sane defaults for Traefik/Docker.
+- **TLS ready:** certificate/key support (required for HTTP/3/QUIC).
+- **Low overhead:** built on Hypercorn, also handling HTTP/2 and WebSockets.
 
 ## Installation
 ```bash
 pip install .
 ```
 
-## Standalone starten
+## Run standalone
 ```bash
 quicstar --config examples/quicstar.example.toml
 ```
 
-Ohne Config greift der Server auf Environment-Variablen zurück und startet die interne Minimal-App:
+Without a config file, Quicstar uses environment variables and launches the internal minimal app:
 ```bash
 QUICSTAR_HOST=0.0.0.0 QUICSTAR_PORT=8000 quicstar --protocol http1
 ```
 
-Wichtige Optionen (auch per Env möglich):
-- `--app` / `QUICSTAR_APP`: ASGI-Pfad, z. B. Django `myproject.asgi:application`.
-- `--protocol` / `QUICSTAR_PROTOCOL`: `auto`, `http3` oder `http1`.
-- `--certfile`, `--keyfile`: TLS-Dateien für HTTP/3/QUIC.
-- `--quic-bind`: separater QUIC-Port, falls Traefik TLS terminiert.
-- `--workers`: Anzahl Prozesse für Mehrkernbetrieb.
+Key options (also available via env vars):
+- `--app` / `QUICSTAR_APP`: ASGI path, e.g., Django `myproject.asgi:application`.
+- `--protocol` / `QUICSTAR_PROTOCOL`: `auto`, `http3`, or `http1`.
+- `--certfile`, `--keyfile`: TLS files for HTTP/3/QUIC.
+- `--quic-bind`: separate QUIC bind address if Traefik terminates TLS.
+- `--workers`: number of processes for multi-core deployments.
 
-## Einsatz mit Django/anderen Frameworks
-Binde einfach die ASGI-App deiner Anwendung ein:
+## Using with Django or other frameworks
+Point Quicstar to your ASGI app:
 ```bash
 quicstar --app myproject.asgi:application --protocol auto --certfile /certs/fullchain.pem --keyfile /certs/privkey.pem
 ```
 
-Die jeweilige Framework-Konfiguration (Settings, Logging etc.) bleibt unangetastet; Quicstar übernimmt nur das Serving.
+Framework-specific configuration (settings, logging, etc.) stays untouched; Quicstar only handles serving.
 
-## Konfiguration per TOML
-Siehe `examples/quicstar.example.toml` für eine menschenlesbare Konfiguration. Die Datei steuert ausschließlich den Standalone-Betrieb.
+## TOML configuration
+See `examples/quicstar.example.toml` for a human-readable standalone configuration.
 
-## Docker & Traefik Hinweise
-- Standard-Bind ist `0.0.0.0`, dadurch containerfreundlich.
-- Für Traefik kann `--quic-bind` genutzt werden, falls ein separater QUIC-Port notwendig ist.
-- Zertifikate können über gemountete Volumes eingebunden werden.
+## Docker & Traefik notes
+- Default bind is `0.0.0.0`, making it container-friendly.
+- Use `--quic-bind` when you need a dedicated QUIC port alongside Traefik TLS termination.
+- Mount certificate volumes as needed for TLS.
 
-## HTTP/1.1-only Modus
-Setze `--protocol http1` oder `QUICSTAR_PROTOCOL=http1`, um nur HTTP/1.1 zu bedienen (z. B. für minimalen Speicherbedarf oder alte Clients).
+## HTTP/1.1-only mode
+Set `--protocol http1` or `QUICSTAR_PROTOCOL=http1` to limit serving to HTTP/1.1 (e.g., for minimal memory usage or legacy clients).
 
-## Weitere Protokolle
-Hypercorn unterstützt HTTP/2 und WebSockets automatisch; QUIC wird bei gesetzten Zertifikaten aktiv.
+## Additional protocols
+Hypercorn automatically supports HTTP/2 and WebSockets; QUIC is enabled when certificates are configured.

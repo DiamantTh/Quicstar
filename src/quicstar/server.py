@@ -61,6 +61,9 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
     # Bind to both stacks when unspecified/any is requested.
     if settings.host in {"0.0.0.0", "::"}:
         cfg.bind = [f"[::]:{settings.port}", f"0.0.0.0:{settings.port}"]
+    # Loopback-only binding with IPv6 priority.
+    elif settings.host in {"localhost", "::1"}:
+        cfg.bind = [f"[::1]:{settings.port}", f"127.0.0.1:{settings.port}"]
     else:
         cfg.bind = [f"{settings.host}:{settings.port}"]
     cfg.loglevel = settings.log_level

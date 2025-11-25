@@ -1,0 +1,22 @@
+[server]
+# Host/Port unter Traefik oder Docker
+host = "0.0.0.0"
+port = 8443
+
+# Pfad zur ASGI-App (kann auch Django sein)
+app = "myproject.asgi:application"
+
+# Protokoll: auto | http3 | http1
+protocol_mode = "auto"
+
+# TLS fuer HTTP/3 aktivieren
+certfile = "/certs/fullchain.pem"
+keyfile = "/certs/privkey.pem"
+
+# Optional: separater QUIC-Port
+quic_bind = "0.0.0.0:443"
+
+# Worker fuer Mehrkern-Betrieb
+workers = 2
+log_level = "info"
+access_log = true

@@ -27,6 +27,40 @@ TRANSLATIONS: Dict[str, Translations] = {
         "error.key_without_cert": "If a keyfile is set, a certfile must also be provided.",
         "error.cert_without_key": "If a certfile is set, a keyfile must also be provided.",
     },
+    "es": {
+        "cli.description": "Servidor HTTP/3 ligero con configuracion TOML y defaults compatibles con Traefik.",
+        "cli.host": "Host/IP para el bind HTTP",
+        "cli.port": "Puerto para el bind HTTP",
+        "cli.app": "Ruta ASGI, p. ej. myproject.asgi:application",
+        "cli.protocol": "Seleccion de protocolo (HTTP/3, solo HTTP/1.1 o automatico)",
+        "cli.workers": "Numero de procesos worker",
+        "cli.no_access_log": "Desactivar access logs",
+        "cli.log_level": "Nivel de log",
+        "cli.certfile": "Certificado TLS (requerido para HTTP/3)",
+        "cli.keyfile": "Clave TLS (requerida para HTTP/3)",
+        "cli.quic_bind": "Bind QUIC opcional, p. ej. '0.0.0.0:443'",
+        "error.protocol_mode": "protocol_mode debe ser: auto, http3 o http1",
+        "error.http3_cert": "Se requiere un certificado TLS (certfile) para HTTP/3.",
+        "error.key_without_cert": "Si se define keyfile, tambien se debe definir certfile.",
+        "error.cert_without_key": "Si se define certfile, tambien se debe definir keyfile.",
+    },
+    "fr": {
+        "cli.description": "Serveur HTTP/3 leger avec configuration TOML et defaults compatibles Traefik.",
+        "cli.host": "Hote/IP pour le bind HTTP",
+        "cli.port": "Port pour le bind HTTP",
+        "cli.app": "Chemin ASGI, ex. myproject.asgi:application",
+        "cli.protocol": "Selection du protocole (HTTP/3, HTTP/1.1 seul ou automatique)",
+        "cli.workers": "Nombre de processus worker",
+        "cli.no_access_log": "Desactiver les access logs",
+        "cli.log_level": "Niveau de log",
+        "cli.certfile": "Certificat TLS (requis pour HTTP/3)",
+        "cli.keyfile": "Cle TLS (requise pour HTTP/3)",
+        "cli.quic_bind": "Bind QUIC optionnel, ex. '0.0.0.0:443'",
+        "error.protocol_mode": "protocol_mode doit etre: auto, http3 ou http1",
+        "error.http3_cert": "Un certificat TLS (certfile) est requis pour HTTP/3.",
+        "error.key_without_cert": "Si un keyfile est defini, un certfile doit aussi etre defini.",
+        "error.cert_without_key": "Si un certfile est defini, un keyfile doit aussi etre defini.",
+    },
     "de": {
         "cli.description": "Leichter HTTP/3-Server mit TOML-Konfiguration und Traefik-kompatiblen Defaults.",
         "cli.host": "Host/IP fuer den HTTP-Bind",
@@ -48,24 +82,23 @@ TRANSLATIONS: Dict[str, Translations] = {
 
 
 def detect_locale() -> str:
-    """Return 'en' or 'de' based on environment, defaulting to English.
+    """Return a supported locale based on environment, defaulting to English.
 
     Priority:
     1. QUICSTAR_LANG override
     2. LC_ALL / LC_MESSAGES / LANG
     """
     override = os.environ.get("QUICSTAR_LANG", "").lower()
-    if override in ("en", "de"):
+    if override in TRANSLATIONS:
         return override
 
     for var in ("LC_ALL", "LC_MESSAGES", "LANG"):
         value = os.environ.get(var, "").lower()
         if not value:
             continue
-        if value.startswith("de"):
-            return "de"
-        if value.startswith("en"):
-            return "en"
+        for code in TRANSLATIONS:
+            if value.startswith(code):
+                return code
     return "en"
 
 

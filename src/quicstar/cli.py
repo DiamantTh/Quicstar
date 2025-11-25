@@ -14,7 +14,7 @@ def _build_parser() -> argparse.ArgumentParser:
         prog="quicstar",
         description=t("cli.description"),
     )
-    parser.add_argument("--config", type=Path, help="Path to a TOML file (standalone mode)")
+    parser.add_argument("--config", type=Path, help=t("cli.config"))
     parser.add_argument("--host", help=t("cli.host"))
     parser.add_argument("--port", type=int, help=t("cli.port"))
     parser.add_argument("--app", help=t("cli.app"))

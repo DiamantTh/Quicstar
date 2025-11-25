@@ -12,6 +12,7 @@ Translator = Callable[[str], str]
 TRANSLATIONS: Dict[str, Translations] = {
     "en": {
         "cli.description": "Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults.",
+        "cli.config": "Path to a TOML file (standalone mode)",
         "cli.host": "Host/IP to bind HTTP",
         "cli.port": "Port to bind HTTP",
         "cli.app": "ASGI path, e.g. myproject.asgi:application",
@@ -29,6 +30,7 @@ TRANSLATIONS: Dict[str, Translations] = {
     },
     "es": {
         "cli.description": "Servidor HTTP/3 ligero con configuracion TOML y defaults compatibles con Traefik.",
+        "cli.config": "Ruta a un archivo TOML (modo standalone)",
         "cli.host": "Host/IP para el bind HTTP",
         "cli.port": "Puerto para el bind HTTP",
         "cli.app": "Ruta ASGI, p. ej. myproject.asgi:application",
@@ -46,6 +48,7 @@ TRANSLATIONS: Dict[str, Translations] = {
     },
     "fr": {
         "cli.description": "Serveur HTTP/3 leger avec configuration TOML et defaults compatibles Traefik.",
+        "cli.config": "Chemin vers un fichier TOML (mode autonome)",
         "cli.host": "Hote/IP pour le bind HTTP",
         "cli.port": "Port pour le bind HTTP",
         "cli.app": "Chemin ASGI, ex. myproject.asgi:application",
@@ -63,6 +66,7 @@ TRANSLATIONS: Dict[str, Translations] = {
     },
     "ja": {
         "cli.description": "軽量なHTTP/3サーバー。TOML設定とTraefik向けデフォルトを備える。",
+        "cli.config": "TOMLファイルへのパス（スタンドアロンモード）",
         "cli.host": "HTTPでバインドするホスト/IP",
         "cli.port": "HTTPでバインドするポート",
         "cli.app": "ASGIパス（例: myproject.asgi:application）",
@@ -80,6 +84,7 @@ TRANSLATIONS: Dict[str, Translations] = {
     },
     "zh": {
         "cli.description": "Qingliang HTTP/3 fuwuqi, TOML peizhi he Traefik you hao moren.",
+        "cli.config": "TOML wenjian de lujing (duli moshi)",
         "cli.host": "HTTP bangding de host/IP",
         "cli.port": "HTTP bangding de duankou",
         "cli.app": "ASGI lujing, li ru myproject.asgi:application",
@@ -97,6 +102,7 @@ TRANSLATIONS: Dict[str, Translations] = {
     },
     "de": {
         "cli.description": "Leichter HTTP/3-Server mit TOML-Konfiguration und Traefik-kompatiblen Defaults.",
+        "cli.config": "Pfad zu einer TOML-Datei (Standalone-Modus)",
         "cli.host": "Host/IP fuer den HTTP-Bind",
         "cli.port": "Port fuer den HTTP-Bind",
         "cli.app": "ASGI-Pfad, z. B. myproject.asgi:application",

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "quicstar"
+version = "0.1.0"
+description = "Leichter, moderner Python-Webserver mit HTTP/3 und flexiblem Betrieb"
+authors = [{name = "Quicstar Team"}]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+  "hypercorn[h3]>=0.16.0",
+  "tomli>=2.0.1; python_version < '3.11'",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Framework :: AsyncIO",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+  "License :: Other/Non-OSI Approved",
+]
+
+[project.scripts]
+quicstar = "quicstar.cli:main"
+quicstar-server = "quicstar.cli:main"
+
+[tool.hatch.build]
+packages = ["src/quicstar"]
+include = [
+  "README.md",
+  "LICENSE",
+  "examples",
+]

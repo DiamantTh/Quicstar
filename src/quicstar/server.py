@@ -81,7 +81,6 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
 
 def serve_app(settings: QuicstarConfig) -> None:
     hypercorn_cfg = build_hypercorn_config(settings)
-    hypercorn_cfg.bind = [f"{settings.host}:{settings.port}"]
 
     app = load_asgi_app(settings.app)
     asyncio.run(serve(app, hypercorn_cfg))

@@ -19,7 +19,6 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Framework :: AsyncIO",
   "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
-  "License :: Other/Non-OSI Approved",
 ]
 
 [project.scripts]

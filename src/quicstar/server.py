@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Dict
+import os
+import platform
+import sys
+from importlib import import_module
+from typing import Any, Awaitable, Callable, Dict
 
 from hypercorn.asyncio import serve
 from hypercorn.config import Config as HypercornConfig
@@ -9,17 +13,47 @@ from hypercorn.config import Config as HypercornConfig
 from .config import QuicstarConfig
 
 
+ASGIApp = Callable[[Dict[str, Any], Any, Any], Awaitable[None]]
+
+
+def load_asgi_app(app_ref: Any) -> ASGIApp:
+    """Resolve a string like 'module:app' into an ASGI callable."""
+    if callable(app_ref):
+        return app_ref  # already a callable
+
+    if isinstance(app_ref, str):
+        if ":" not in app_ref:
+            raise ValueError("ASGI path must be in the form 'module:attribute'")
+        module_name, attr_name = app_ref.split(":", 1)
+        module = import_module(module_name)
+        app = getattr(module, attr_name)
+        if not callable(app):
+            raise TypeError(f"Attribute '{attr_name}' in '{module_name}' is not callable")
+        return app
+
+    raise TypeError("app reference must be a callable or import path string")
+
+
 async def default_app(scope: Dict[str, Any], receive, send) -> None:
     if scope["type"] != "http":
-        raise RuntimeError("default_app unterstützt nur HTTP-Scope.")
+        raise RuntimeError("default_app supports only HTTP scope.")
 
-    await send({
-        "type": "http.response.start",
-        "status": 200,
-        "headers": [(b"content-type", b"text/plain; charset=utf-8")],
-    })
-    await send({"type": "http.response.body", "body": b"Quicstar laeuft."
-    })
+    info = [
+        "Quicstar is running.",
+        f"Python: {sys.version.split()[0]}",
+        f"Platform: {platform.platform()}",
+        f"PID: {os.getpid()}",
+    ]
+    body = ("\n".join(info)).encode("utf-8")
+
+    await send(
+        {
+            "type": "http.response.start",
+            "status": 200,
+            "headers": [(b"content-type", b"text/plain; charset=utf-8")],
+        }
+    )
+    await send({"type": "http.response.body", "body": body})
 
 
 def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
@@ -49,7 +83,8 @@ def serve_app(settings: QuicstarConfig) -> None:
     hypercorn_cfg = build_hypercorn_config(settings)
     hypercorn_cfg.bind = [f"{settings.host}:{settings.port}"]
 
-    asyncio.run(serve(settings.app, hypercorn_cfg))
+    app = load_asgi_app(settings.app)
+    asyncio.run(serve(app, hypercorn_cfg))
 
 
 __all__ = ["serve_app", "build_hypercorn_config", "default_app"]

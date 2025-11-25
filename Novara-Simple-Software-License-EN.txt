@@ -1,0 +1,51 @@
+Novara Simple Software License (NSSL)
+
+Development Notice (Living License)
+This license is a living document under continuous development. There are no fixed version numbers. 
+Updates and improvements are integrated over time as long as the author (Thomas / DiamantTh) maintains it.
+Newer texts replace older ones, but rights already granted remain valid. Interpretations should favor user freedom and transparency.
+
+Copyright (C) 2025 Thomas (DiamantTh)
+
+Preamble
+This license was created to provide a simplified and clear version of the Novara Software Freedom License (NSFL). 
+It protects the fundamental freedoms to use, study, share, and modify software, while adding a lightweight transparency obligation for network and commercial use.
+It is intended for small and medium-sized projects, experiments, and prototypes where full legal length would be excessive.
+
+1. Freedom
+You may use, study, modify, and share this software for any purpose, provided that this license text is included and clearly visible to all recipients.
+
+2. Source and Transparency
+If you distribute or make the program available to others (including network services), you must provide the corresponding source code, build scripts, and configuration needed to reproduce your version.
+Any changes used in public or production environments must be published within 45 days of deployment.
+
+3. Network and Service Use
+Operating the program as a service counts as public distribution. 
+You must ensure users can access the source code and documentation of the version you operate, excluding passwords or private keys.
+Artificial restrictions such as “cloud-only” modules are not allowed.
+
+4. Fair Commercial Use
+You may charge for hosting, support, or integration, but you may not charge more than production cost plus 25% margin.
+Access to source code or functionality must not depend on payment beyond this fair price.
+
+5. Anti-DRM and Ethics
+You may not include DRM, spyware, or surveillance systems in any version of the program.
+Use for weapon systems or purposes primarily intended to harm people is prohibited.
+
+6. Patents and Compatibility
+Each contributor grants a royalty-free, worldwide patent license for their contributions.
+This license is compatible with software released under the NSFL or AGPLv3.
+
+7. Termination and Reinstatement
+Any violation of sections 2–5 terminates your rights under this license automatically.
+If you correct the violation within 30 days and make the fix public, your rights are reinstated.
+
+8. Warranty and Liability
+This software is provided “as is”, without warranty of any kind. 
+The author is not liable for any damages arising from its use.
+
+9. Interpretation
+Ambiguities must be resolved to preserve the freedoms to run, study, share, and modify the software.
+If any part is found unenforceable, the remainder remains in full force.
+
+END OF TERMS (EN)

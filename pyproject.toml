@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "quicstar"
 version = "0.1.0"
-description = "Leichter, moderner Python-Webserver mit HTTP/3 und flexiblem Betrieb"
+description = "Lightweight, modern Python web server with HTTP/3 and flexible deployment"
 authors = [{name = "Quicstar Team"}]
 readme = "README.md"
 license = { file = "LICENSE" }

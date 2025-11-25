@@ -58,7 +58,11 @@ async def default_app(scope: Dict[str, Any], receive, send) -> None:
 
 def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
     cfg = HypercornConfig()
-    cfg.bind = [f"{settings.host}:{settings.port}"]
+    # Bind both IPv4 and IPv6 by default when host is unspecified/0.0.0.0.
+    if settings.host in {"0.0.0.0", "::"}:
+        cfg.bind = [f"0.0.0.0:{settings.port}", f"[::]:{settings.port}"]
+    else:
+        cfg.bind = [f"{settings.host}:{settings.port}"]
     cfg.loglevel = settings.log_level
     cfg.accesslog = "-" if settings.access_log else None
     cfg.workers = settings.workers or 1

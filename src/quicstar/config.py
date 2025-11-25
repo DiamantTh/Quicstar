@@ -12,7 +12,7 @@ else:
     import tomli as tomllib
 
 
-DEFAULT_HOST = "0.0.0.0"
+DEFAULT_HOST = "::"
 DEFAULT_PORT = 8000
 DEFAULT_APP = "quicstar.server:default_app"
 

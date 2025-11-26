@@ -58,8 +58,10 @@ async def default_app(scope: Dict[str, Any], receive, send) -> None:
 
 def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
     cfg = HypercornConfig()
+    if settings.binds:
+        cfg.bind = settings.binds
     # Bind to both stacks when unspecified/any is requested.
-    if settings.host in {"0.0.0.0", "::"}:
+    elif settings.host in {"0.0.0.0", "::"}:
         cfg.bind = [f"[::]:{settings.port}", f"0.0.0.0:{settings.port}"]
     # Loopback-only binding with IPv6 priority.
     elif settings.host in {"localhost", "::1"}:
@@ -67,6 +69,8 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
     else:
         cfg.bind = [f"{settings.host}:{settings.port}"]
     cfg.loglevel = settings.log_level
+    if settings.backlog is not None:
+        cfg.backlog = settings.backlog
     cfg.accesslog = "-" if settings.access_log else None
     cfg.workers = settings.workers or 1
 

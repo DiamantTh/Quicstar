@@ -25,9 +25,11 @@ class QuicstarConfig:
 
     host: str = DEFAULT_HOST
     port: int = DEFAULT_PORT
+    binds: Optional[list[str]] = None
     app: str = DEFAULT_APP
     protocol_mode: str = "auto"  # auto|http3|http1
     workers: int = field(default_factory=os.cpu_count)
+    backlog: Optional[int] = None
     access_log: bool = True
     log_level: str = "info"
     certfile: Optional[Path] = None
@@ -42,17 +44,21 @@ class QuicstarConfig:
 
     @classmethod
     def from_env(cls) -> "QuicstarConfig":
+        env_binds = os.getenv("QUICSTAR_BINDS")
+        binds = [b for b in env_binds.split(",") if b] if env_binds else None
         return cls(
             host=os.getenv("QUICSTAR_HOST", DEFAULT_HOST),
             port=int(os.getenv("QUICSTAR_PORT", DEFAULT_PORT)),
             app=os.getenv("QUICSTAR_APP", DEFAULT_APP),
             protocol_mode=os.getenv("QUICSTAR_PROTOCOL", "auto"),
             workers=int(os.getenv("QUICSTAR_WORKERS", os.cpu_count() or 1)),
+            backlog=int(os.getenv("QUICSTAR_BACKLOG", "0")) or None,
             access_log=os.getenv("QUICSTAR_ACCESS_LOG", "true").lower() == "true",
             log_level=os.getenv("QUICSTAR_LOG_LEVEL", "info"),
             certfile=cls._maybe_path(os.getenv("QUICSTAR_CERTFILE")),
             keyfile=cls._maybe_path(os.getenv("QUICSTAR_KEYFILE")),
             quic_bind=os.getenv("QUICSTAR_QUIC_BIND"),
+            binds=binds,
         )
 
     @classmethod
@@ -84,6 +90,10 @@ class QuicstarConfig:
             raise ValueError(t("If a keyfile is set, a certfile must also be provided."))
         if self.certfile and not self.keyfile:
             raise ValueError(t("If a certfile is set, a keyfile must also be provided."))
+        if self.binds:
+            for entry in self.binds:
+                if ":" not in entry:
+                    raise ValueError(f"Invalid bind '{entry}'; use host:port or [::]:port")
 
 
 def load_config(config_path: Optional[str]) -> QuicstarConfig:

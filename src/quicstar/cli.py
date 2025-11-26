@@ -15,7 +15,12 @@ def _build_parser() -> argparse.ArgumentParser:
         description=t("Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."),
     )
     parser.add_argument("--config", type=Path, help=t("Path to a TOML file (standalone mode)"))
-    parser.add_argument("--host", help=t("Host/IP to bind HTTP"))
+    parser.add_argument("--host", help=t("Host/IP to bind HTTP (deprecated, use --bind)"))
+    parser.add_argument(
+        "--bind",
+        action="append",
+        help="Bind address, e.g. 0.0.0.0:8000, [::]:8000 (can be used multiple times)",
+    )
     parser.add_argument("--port", type=int, help=t("Port to bind HTTP"))
     parser.add_argument("--app", help=t("ASGI path, e.g. myproject.asgi:application"))
     parser.add_argument(
@@ -23,6 +28,7 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=["auto", "http3", "http1"],
         help=t("Protocol selection (HTTP/3, HTTP/1.1 only, or automatic)"),
     )
+    parser.add_argument("--backlog", type=int, help="Socket listen backlog")
     parser.add_argument("--workers", type=int, help=t("Number of worker processes"))
     parser.add_argument("--no-access-log", action="store_true", help=t("Disable access logs"))
     parser.add_argument(
@@ -40,9 +46,11 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
     overrides = {
         "host": args.host,
         "port": args.port,
+        "binds": args.bind,
         "app": args.app,
         "protocol_mode": args.protocol,
         "workers": args.workers,
+        "backlog": args.backlog,
         "access_log": None if args.no_access_log is False else False,
         "log_level": args.log_level,
         "certfile": args.certfile,

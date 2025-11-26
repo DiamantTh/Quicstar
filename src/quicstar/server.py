@@ -134,7 +134,17 @@ def serve_app(settings: QuicstarConfig) -> None:
                 # add_signal_handler may not be available on some platforms (e.g., Windows)
                 signal.signal(sig, lambda *_: shutdown_event.set())
 
-        await serve(app, hypercorn_cfg, shutdown_trigger=shutdown_event.wait)
+        if settings.pidfile:
+            settings.pidfile.write_text(str(os.getpid()))
+
+        try:
+            await serve(app, hypercorn_cfg, shutdown_trigger=shutdown_event.wait)
+        finally:
+            if settings.pidfile and settings.pidfile.exists():
+                try:
+                    settings.pidfile.unlink()
+                except OSError:
+                    pass
 
     asyncio.run(main())
 

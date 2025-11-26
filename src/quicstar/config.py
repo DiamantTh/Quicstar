@@ -39,6 +39,7 @@ class QuicstarConfig:
     keep_alive_timeout: Optional[int] = None
     graceful_timeout: Optional[int] = None
     shutdown_timeout: Optional[int] = None
+    pidfile: Optional[Path] = None
     certfile: Optional[Path] = None
     keyfile: Optional[Path] = None
     quic_bind: Optional[str] = None
@@ -69,6 +70,7 @@ class QuicstarConfig:
             keep_alive_timeout=int(os.getenv("QUICSTAR_KEEP_ALIVE", "0")) or None,
             graceful_timeout=int(os.getenv("QUICSTAR_GRACEFUL_TIMEOUT", "0")) or None,
             shutdown_timeout=int(os.getenv("QUICSTAR_SHUTDOWN_TIMEOUT", "0")) or None,
+            pidfile=cls._maybe_path(os.getenv("QUICSTAR_PIDFILE")),
             certfile=cls._maybe_path(os.getenv("QUICSTAR_CERTFILE")),
             keyfile=cls._maybe_path(os.getenv("QUICSTAR_KEYFILE")),
             quic_bind=os.getenv("QUICSTAR_QUIC_BIND"),

@@ -52,6 +52,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--keyfile", type=Path, help=t("TLS key (required for HTTP/3)"))
     parser.add_argument("--quic-bind", help=t("Optional QUIC bind, e.g. '0.0.0.0:443'"))
     parser.add_argument("--access-log-format", help="Access log format string")
+    parser.add_argument("--pidfile", type=Path, help="Write PID to this file (removed on shutdown)")
+    parser.add_argument("--print-config", action="store_true", help="Print merged config and exit")
     return parser
 
 
@@ -73,6 +75,7 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
         "graceful_timeout": args.graceful_timeout,
         "shutdown_timeout": args.shutdown_timeout,
         "access_log_format": args.access_log_format,
+        "pidfile": args.pidfile,
         "certfile": args.certfile,
         "keyfile": args.keyfile,
         "quic_bind": args.quic_bind,
@@ -89,6 +92,11 @@ def main() -> None:
 
     settings = load_config(str(args.config)) if args.config else load_config(None)
     settings = _apply_overrides(settings, args)
+
+    if args.print_config:
+        # Avoid printing sensitive file contents; only show resolved values.
+        print(settings)
+        return
 
     serve_app(settings)
 

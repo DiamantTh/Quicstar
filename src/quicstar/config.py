@@ -39,6 +39,8 @@ class QuicstarConfig:
     keep_alive_timeout: Optional[int] = None
     graceful_timeout: Optional[int] = None
     shutdown_timeout: Optional[int] = None
+    reload: bool = False
+    reload_dirs: Optional[list[str]] = None
     pidfile: Optional[Path] = None
     certfile: Optional[Path] = None
     keyfile: Optional[Path] = None
@@ -54,6 +56,8 @@ class QuicstarConfig:
     def from_env(cls) -> "QuicstarConfig":
         env_binds = os.getenv("QUICSTAR_BINDS")
         binds = [b for b in env_binds.split(",") if b] if env_binds else None
+        env_reload_dirs = os.getenv("QUICSTAR_RELOAD_DIRS")
+        reload_dirs = [p for p in env_reload_dirs.split(",") if p] if env_reload_dirs else None
         return cls(
             host=os.getenv("QUICSTAR_HOST", DEFAULT_HOST),
             port=int(os.getenv("QUICSTAR_PORT", DEFAULT_PORT)),
@@ -70,6 +74,8 @@ class QuicstarConfig:
             keep_alive_timeout=int(os.getenv("QUICSTAR_KEEP_ALIVE", "0")) or None,
             graceful_timeout=int(os.getenv("QUICSTAR_GRACEFUL_TIMEOUT", "0")) or None,
             shutdown_timeout=int(os.getenv("QUICSTAR_SHUTDOWN_TIMEOUT", "0")) or None,
+            reload=os.getenv("QUICSTAR_RELOAD", "false").lower() == "true",
+            reload_dirs=reload_dirs,
             pidfile=cls._maybe_path(os.getenv("QUICSTAR_PIDFILE")),
             certfile=cls._maybe_path(os.getenv("QUICSTAR_CERTFILE")),
             keyfile=cls._maybe_path(os.getenv("QUICSTAR_KEYFILE")),

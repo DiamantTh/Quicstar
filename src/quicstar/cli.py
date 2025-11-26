@@ -54,6 +54,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--access-log-format", help="Access log format string")
     parser.add_argument("--pidfile", type=Path, help="Write PID to this file (removed on shutdown)")
     parser.add_argument("--print-config", action="store_true", help="Print merged config and exit")
+    parser.add_argument("--reload", action="store_true", help="Enable auto-reload on code changes (dev only)")
+    parser.add_argument("--reload-dirs", action="append", help="Additional directories to watch for reload (can be repeated)")
     return parser
 
 
@@ -76,6 +78,8 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
         "shutdown_timeout": args.shutdown_timeout,
         "access_log_format": args.access_log_format,
         "pidfile": args.pidfile,
+        "reload": args.reload or None,
+        "reload_dirs": args.reload_dirs,
         "certfile": args.certfile,
         "keyfile": args.keyfile,
         "quic_bind": args.quic_bind,

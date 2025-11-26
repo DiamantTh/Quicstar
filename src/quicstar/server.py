@@ -98,6 +98,10 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
         cfg.graceful_timeout = settings.graceful_timeout
     if settings.shutdown_timeout is not None:
         cfg.shutdown_timeout = settings.shutdown_timeout
+    if settings.reload:
+        cfg.use_reloader = True
+    if settings.reload_dirs:
+        cfg.reload_dirs = settings.reload_dirs
 
     # Protokollwahl
     cfg.use_http3 = settings.protocol_mode == "http3" or (

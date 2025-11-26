@@ -36,6 +36,11 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=["debug", "info", "warning", "error", "critical"],
         help=t("Log level"),
     )
+    parser.add_argument("--proxy-headers", action="store_true", help="Trust proxy headers (X-Forwarded-For/Proto)")
+    parser.add_argument("--forwarded-allow-ips", help="Comma-separated trusted proxy IPs, e.g. 127.0.0.1,::1")
+    parser.add_argument("--keep-alive", type=int, help="Keep-alive timeout (seconds)")
+    parser.add_argument("--graceful-timeout", type=int, help="Graceful shutdown timeout (seconds)")
+    parser.add_argument("--shutdown-timeout", type=int, help="Hard shutdown timeout (seconds)")
     parser.add_argument("--certfile", type=Path, help=t("TLS certificate (required for HTTP/3)"))
     parser.add_argument("--keyfile", type=Path, help=t("TLS key (required for HTTP/3)"))
     parser.add_argument("--quic-bind", help=t("Optional QUIC bind, e.g. '0.0.0.0:443'"))
@@ -53,6 +58,11 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
         "backlog": args.backlog,
         "access_log": None if args.no_access_log is False else False,
         "log_level": args.log_level,
+        "proxy_headers": args.proxy_headers or None,
+        "forwarded_allow_ips": args.forwarded_allow_ips,
+        "keep_alive_timeout": args.keep_alive,
+        "graceful_timeout": args.graceful_timeout,
+        "shutdown_timeout": args.shutdown_timeout,
         "certfile": args.certfile,
         "keyfile": args.keyfile,
         "quic_bind": args.quic_bind,

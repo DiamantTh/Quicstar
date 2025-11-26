@@ -73,6 +73,16 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
         cfg.backlog = settings.backlog
     cfg.accesslog = "-" if settings.access_log else None
     cfg.workers = settings.workers or 1
+    if settings.proxy_headers:
+        cfg.proxy_headers = True
+    if settings.forwarded_allow_ips:
+        cfg.forwarded_allow_ips = settings.forwarded_allow_ips
+    if settings.keep_alive_timeout is not None:
+        cfg.keep_alive_timeout = settings.keep_alive_timeout
+    if settings.graceful_timeout is not None:
+        cfg.graceful_timeout = settings.graceful_timeout
+    if settings.shutdown_timeout is not None:
+        cfg.shutdown_timeout = settings.shutdown_timeout
 
     # Protokollwahl
     cfg.use_http3 = settings.protocol_mode == "http3" or (

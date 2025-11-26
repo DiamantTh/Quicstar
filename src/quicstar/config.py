@@ -32,6 +32,11 @@ class QuicstarConfig:
     backlog: Optional[int] = None
     access_log: bool = True
     log_level: str = "info"
+    proxy_headers: bool = False
+    forwarded_allow_ips: Optional[str] = None
+    keep_alive_timeout: Optional[int] = None
+    graceful_timeout: Optional[int] = None
+    shutdown_timeout: Optional[int] = None
     certfile: Optional[Path] = None
     keyfile: Optional[Path] = None
     quic_bind: Optional[str] = None
@@ -55,6 +60,11 @@ class QuicstarConfig:
             backlog=int(os.getenv("QUICSTAR_BACKLOG", "0")) or None,
             access_log=os.getenv("QUICSTAR_ACCESS_LOG", "true").lower() == "true",
             log_level=os.getenv("QUICSTAR_LOG_LEVEL", "info"),
+            proxy_headers=os.getenv("QUICSTAR_PROXY_HEADERS", "false").lower() == "true",
+            forwarded_allow_ips=os.getenv("QUICSTAR_FORWARDED_ALLOW_IPS"),
+            keep_alive_timeout=int(os.getenv("QUICSTAR_KEEP_ALIVE", "0")) or None,
+            graceful_timeout=int(os.getenv("QUICSTAR_GRACEFUL_TIMEOUT", "0")) or None,
+            shutdown_timeout=int(os.getenv("QUICSTAR_SHUTDOWN_TIMEOUT", "0")) or None,
             certfile=cls._maybe_path(os.getenv("QUICSTAR_CERTFILE")),
             keyfile=cls._maybe_path(os.getenv("QUICSTAR_KEYFILE")),
             quic_bind=os.getenv("QUICSTAR_QUIC_BIND"),

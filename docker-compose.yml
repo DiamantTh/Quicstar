@@ -1,0 +1,14 @@
+services:
+  quicstar:
+    build:
+      context: .
+      network: host
+
+      dockerfile: Dockerfile.compose
+    ports:
+      - "8000:8000/tcp"
+      - "8000:8000/udp"
+    environment:
+      # IPv6 any => Quicstar binds dual-stack (IPv6 + IPv4) per server config
+      QUICSTAR_HOST: "::"
+      QUICSTAR_PORT: "8000"

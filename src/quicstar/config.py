@@ -35,6 +35,7 @@ class QuicstarConfig:
     proxy_headers: bool = False
     forwarded_allow_ips: Optional[str] = None
     forwarded_allow_ips_file: Optional[Path] = None
+    access_log_format: Optional[str] = None
     keep_alive_timeout: Optional[int] = None
     graceful_timeout: Optional[int] = None
     shutdown_timeout: Optional[int] = None
@@ -64,6 +65,7 @@ class QuicstarConfig:
             proxy_headers=os.getenv("QUICSTAR_PROXY_HEADERS", "false").lower() == "true",
             forwarded_allow_ips=os.getenv("QUICSTAR_FORWARDED_ALLOW_IPS"),
             forwarded_allow_ips_file=cls._maybe_path(os.getenv("QUICSTAR_FORWARDED_ALLOW_IPS_FILE")),
+            access_log_format=os.getenv("QUICSTAR_ACCESS_LOG_FORMAT"),
             keep_alive_timeout=int(os.getenv("QUICSTAR_KEEP_ALIVE", "0")) or None,
             graceful_timeout=int(os.getenv("QUICSTAR_GRACEFUL_TIMEOUT", "0")) or None,
             shutdown_timeout=int(os.getenv("QUICSTAR_SHUTDOWN_TIMEOUT", "0")) or None,

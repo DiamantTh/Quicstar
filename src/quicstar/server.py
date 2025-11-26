@@ -7,6 +7,7 @@ import sys
 from importlib import import_module
 from typing import Any, Awaitable, Callable, Dict
 from datetime import datetime
+import signal
 
 from hypercorn.asyncio import serve
 from hypercorn.config import Config as HypercornConfig
@@ -89,6 +90,8 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
         cfg.forwarded_allow_ips = ",".join(
             line.strip() for line in settings.forwarded_allow_ips_file.read_text().splitlines() if line.strip()
         )
+    if settings.access_log_format:
+        cfg.access_log_format = settings.access_log_format
     if settings.keep_alive_timeout is not None:
         cfg.keep_alive_timeout = settings.keep_alive_timeout
     if settings.graceful_timeout is not None:
@@ -116,7 +119,24 @@ def serve_app(settings: QuicstarConfig) -> None:
     hypercorn_cfg = build_hypercorn_config(settings)
 
     app = load_asgi_app(settings.app)
-    asyncio.run(serve(app, hypercorn_cfg))
+
+    async def main() -> None:
+        loop = asyncio.get_running_loop()
+        shutdown_event = asyncio.Event()
+
+        def _handle_signal() -> None:
+            shutdown_event.set()
+
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            try:
+                loop.add_signal_handler(sig, _handle_signal)
+            except NotImplementedError:
+                # add_signal_handler may not be available on some platforms (e.g., Windows)
+                signal.signal(sig, lambda *_: shutdown_event.set())
+
+        await serve(app, hypercorn_cfg, shutdown_trigger=shutdown_event.wait)
+
+    asyncio.run(main())
 
 
 __all__ = ["serve_app", "build_hypercorn_config", "default_app"]

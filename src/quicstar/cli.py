@@ -51,6 +51,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--certfile", type=Path, help=t("TLS certificate (required for HTTP/3)"))
     parser.add_argument("--keyfile", type=Path, help=t("TLS key (required for HTTP/3)"))
     parser.add_argument("--quic-bind", help=t("Optional QUIC bind, e.g. '0.0.0.0:443'"))
+    parser.add_argument("--access-log-format", help="Access log format string")
     return parser
 
 
@@ -71,6 +72,7 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
         "keep_alive_timeout": args.keep_alive,
         "graceful_timeout": args.graceful_timeout,
         "shutdown_timeout": args.shutdown_timeout,
+        "access_log_format": args.access_log_format,
         "certfile": args.certfile,
         "keyfile": args.keyfile,
         "quic_bind": args.quic_bind,

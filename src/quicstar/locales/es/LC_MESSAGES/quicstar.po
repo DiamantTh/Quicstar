@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: quicstar 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."
+msgstr "Servidor HTTP/3 ligero con configuracion TOML y defaults compatibles con Traefik."
+
+msgid "Path to a TOML file (standalone mode)"
+msgstr "Ruta a un archivo TOML (modo standalone)"
+
+msgid "Host/IP to bind HTTP"
+msgstr "Host/IP para el bind HTTP"
+
+msgid "Port to bind HTTP"
+msgstr "Puerto para el bind HTTP"
+
+msgid "ASGI path, e.g. myproject.asgi:application"
+msgstr "Ruta ASGI, p. ej. myproject.asgi:application"
+
+msgid "Protocol selection (HTTP/3, HTTP/1.1 only, or automatic)"
+msgstr "Seleccion de protocolo (HTTP/3, solo HTTP/1.1 o automatico)"
+
+msgid "Number of worker processes"
+msgstr "Numero de procesos worker"
+
+msgid "Disable access logs"
+msgstr "Desactivar access logs"
+
+msgid "Log level"
+msgstr "Nivel de log"
+
+msgid "TLS certificate (required for HTTP/3)"
+msgstr "Certificado TLS (requerido para HTTP/3)"
+
+msgid "TLS key (required for HTTP/3)"
+msgstr "Clave TLS (requerida para HTTP/3)"
+
+msgid "Optional QUIC bind, e.g. '0.0.0.0:443'"
+msgstr "Bind QUIC opcional, p. ej. '0.0.0.0:443'"
+
+msgid "protocol_mode must be one of: auto, http3, http1"
+msgstr "protocol_mode debe ser: auto, http3 o http1"
+
+msgid "TLS certificate (certfile) is required for HTTP/3."
+msgstr "Se requiere un certificado TLS (certfile) para HTTP/3."
+
+msgid "If a keyfile is set, a certfile must also be provided."
+msgstr "Si se define keyfile, tambien se debe definir certfile."
+
+msgid "If a certfile is set, a keyfile must also be provided."
+msgstr "Si se define certfile, tambien se debe definir keyfile."

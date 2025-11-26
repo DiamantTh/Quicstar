@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: quicstar 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."
+msgstr "Qingliang HTTP/3 fuwuqi, TOML peizhi he Traefik you hao moren."
+
+msgid "Path to a TOML file (standalone mode)"
+msgstr "TOML wenjian de lujing (duli moshi)"
+
+msgid "Host/IP to bind HTTP"
+msgstr "HTTP bangding de host/IP"
+
+msgid "Port to bind HTTP"
+msgstr "HTTP bangding de duankou"
+
+msgid "ASGI path, e.g. myproject.asgi:application"
+msgstr "ASGI lujing, li ru myproject.asgi:application"
+
+msgid "Protocol selection (HTTP/3, HTTP/1.1 only, or automatic)"
+msgstr "Xieyi xuanze (HTTP/3, zhiyou HTTP/1.1, huozhe zidong)"
+
+msgid "Number of worker processes"
+msgstr "Worker jincheng shu"
+
+msgid "Disable access logs"
+msgstr "Jinyong access log"
+
+msgid "Log level"
+msgstr "Rizhi dengji"
+
+msgid "TLS certificate (required for HTTP/3)"
+msgstr "TLS zhengshu (HTTP/3 bixu)"
+
+msgid "TLS key (required for HTTP/3)"
+msgstr "TLS miyao (HTTP/3 bixu)"
+
+msgid "Optional QUIC bind, e.g. '0.0.0.0:443'"
+msgstr "Kexuan QUIC bangding, li ru '0.0.0.0:443'"
+
+msgid "protocol_mode must be one of: auto, http3, http1"
+msgstr "protocol_mode ying wei auto/http3/http1 qi zhong yi ge"
+
+msgid "TLS certificate (certfile) is required for HTTP/3."
+msgstr "HTTP/3 xuyao TLS zhengshu (certfile)."
+
+msgid "If a keyfile is set, a certfile must also be provided."
+msgstr "She zhi keyfile shi bixu tongshi she zhi certfile."
+
+msgid "If a certfile is set, a keyfile must also be provided."
+msgstr "She zhi certfile shi bixu tongshi she zhi keyfile."

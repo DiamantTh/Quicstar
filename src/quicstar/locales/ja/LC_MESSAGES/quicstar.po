@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: quicstar 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."
+msgstr "軽量なHTTP/3サーバー。TOML設定とTraefik向けデフォルトを備える。"
+
+msgid "Path to a TOML file (standalone mode)"
+msgstr "TOMLファイルへのパス（スタンドアロンモード）"
+
+msgid "Host/IP to bind HTTP"
+msgstr "HTTPでバインドするホスト/IP"
+
+msgid "Port to bind HTTP"
+msgstr "HTTPでバインドするポート"
+
+msgid "ASGI path, e.g. myproject.asgi:application"
+msgstr "ASGIパス（例: myproject.asgi:application）"
+
+msgid "Protocol selection (HTTP/3, HTTP/1.1 only, or automatic)"
+msgstr "プロトコル選択（HTTP/3、HTTP/1.1のみ、または自動）"
+
+msgid "Number of worker processes"
+msgstr "ワーカープロセス数"
+
+msgid "Disable access logs"
+msgstr "アクセスログを無効化"
+
+msgid "Log level"
+msgstr "ログレベル"
+
+msgid "TLS certificate (required for HTTP/3)"
+msgstr "TLS証明書（HTTP/3に必須）"
+
+msgid "TLS key (required for HTTP/3)"
+msgstr "TLS秘密鍵（HTTP/3に必須）"
+
+msgid "Optional QUIC bind, e.g. '0.0.0.0:443'"
+msgstr "任意のQUICバインド（例: '0.0.0.0:443'）"
+
+msgid "protocol_mode must be one of: auto, http3, http1"
+msgstr "protocol_mode は auto/http3/http1 のいずれかにしてください"
+
+msgid "TLS certificate (certfile) is required for HTTP/3."
+msgstr "HTTP/3 には TLS 証明書 (certfile) が必要です。"
+
+msgid "If a keyfile is set, a certfile must also be provided."
+msgstr "keyfile を設定する場合、certfile も必要です。"
+
+msgid "If a certfile is set, a keyfile must also be provided."
+msgstr "certfile を設定する場合、keyfile も必要です。"

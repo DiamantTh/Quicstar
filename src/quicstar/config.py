@@ -77,13 +77,13 @@ class QuicstarConfig:
         t, _ = get_translator()
         valid_modes = {"auto", "http3", "http1"}
         if self.protocol_mode not in valid_modes:
-            raise ValueError(t("error.protocol_mode"))
+            raise ValueError(t("protocol_mode must be one of: auto, http3, http1"))
         if self.protocol_mode == "http3" and not self.certfile:
-            raise ValueError(t("error.http3_cert"))
+            raise ValueError(t("TLS certificate (certfile) is required for HTTP/3."))
         if self.keyfile and not self.certfile:
-            raise ValueError(t("error.key_without_cert"))
+            raise ValueError(t("If a keyfile is set, a certfile must also be provided."))
         if self.certfile and not self.keyfile:
-            raise ValueError(t("error.cert_without_key"))
+            raise ValueError(t("If a certfile is set, a keyfile must also be provided."))
 
 
 def load_config(config_path: Optional[str]) -> QuicstarConfig:

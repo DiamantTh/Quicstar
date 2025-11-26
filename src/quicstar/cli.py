@@ -12,23 +12,27 @@ def _build_parser() -> argparse.ArgumentParser:
     t, _ = get_translator()
     parser = argparse.ArgumentParser(
         prog="quicstar",
-        description=t("cli.description"),
+        description=t("Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."),
     )
-    parser.add_argument("--config", type=Path, help=t("cli.config"))
-    parser.add_argument("--host", help=t("cli.host"))
-    parser.add_argument("--port", type=int, help=t("cli.port"))
-    parser.add_argument("--app", help=t("cli.app"))
+    parser.add_argument("--config", type=Path, help=t("Path to a TOML file (standalone mode)"))
+    parser.add_argument("--host", help=t("Host/IP to bind HTTP"))
+    parser.add_argument("--port", type=int, help=t("Port to bind HTTP"))
+    parser.add_argument("--app", help=t("ASGI path, e.g. myproject.asgi:application"))
     parser.add_argument(
         "--protocol",
         choices=["auto", "http3", "http1"],
-        help=t("cli.protocol"),
+        help=t("Protocol selection (HTTP/3, HTTP/1.1 only, or automatic)"),
     )
-    parser.add_argument("--workers", type=int, help=t("cli.workers"))
-    parser.add_argument("--no-access-log", action="store_true", help=t("cli.no_access_log"))
-    parser.add_argument("--log-level", choices=["debug", "info", "warning", "error", "critical"], help=t("cli.log_level"))
-    parser.add_argument("--certfile", type=Path, help=t("cli.certfile"))
-    parser.add_argument("--keyfile", type=Path, help=t("cli.keyfile"))
-    parser.add_argument("--quic-bind", help=t("cli.quic_bind"))
+    parser.add_argument("--workers", type=int, help=t("Number of worker processes"))
+    parser.add_argument("--no-access-log", action="store_true", help=t("Disable access logs"))
+    parser.add_argument(
+        "--log-level",
+        choices=["debug", "info", "warning", "error", "critical"],
+        help=t("Log level"),
+    )
+    parser.add_argument("--certfile", type=Path, help=t("TLS certificate (required for HTTP/3)"))
+    parser.add_argument("--keyfile", type=Path, help=t("TLS key (required for HTTP/3)"))
+    parser.add_argument("--quic-bind", help=t("Optional QUIC bind, e.g. '0.0.0.0:443'"))
     return parser
 
 

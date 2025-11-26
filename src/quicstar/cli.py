@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from importlib import metadata
 
 from .config import QuicstarConfig, load_config
 from .i18n import get_translator
@@ -14,6 +15,11 @@ def _build_parser() -> argparse.ArgumentParser:
         prog="quicstar",
         description=t("Lightweight HTTP/3 server with TOML configuration and Traefik-friendly defaults."),
     )
+    try:
+        version = metadata.version("quicstar")
+    except metadata.PackageNotFoundError:
+        version = "0.0.0"
+    parser.add_argument("--version", action="version", version=f"%(prog)s {version}")
     parser.add_argument("--config", type=Path, help=t("Path to a TOML file (standalone mode)"))
     parser.add_argument("--host", help=t("Host/IP to bind HTTP (deprecated, use --bind)"))
     parser.add_argument(
@@ -38,6 +44,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--proxy-headers", action="store_true", help="Trust proxy headers (X-Forwarded-For/Proto)")
     parser.add_argument("--forwarded-allow-ips", help="Comma-separated trusted proxy IPs, e.g. 127.0.0.1,::1")
+    parser.add_argument("--forwarded-allow-ips-file", type=Path, help="File with trusted proxy IPs/CIDRs, one per line")
     parser.add_argument("--keep-alive", type=int, help="Keep-alive timeout (seconds)")
     parser.add_argument("--graceful-timeout", type=int, help="Graceful shutdown timeout (seconds)")
     parser.add_argument("--shutdown-timeout", type=int, help="Hard shutdown timeout (seconds)")
@@ -60,6 +67,7 @@ def _apply_overrides(base: QuicstarConfig, args: argparse.Namespace) -> Quicstar
         "log_level": args.log_level,
         "proxy_headers": args.proxy_headers or None,
         "forwarded_allow_ips": args.forwarded_allow_ips,
+        "forwarded_allow_ips_file": args.forwarded_allow_ips_file,
         "keep_alive_timeout": args.keep_alive,
         "graceful_timeout": args.graceful_timeout,
         "shutdown_timeout": args.shutdown_timeout,

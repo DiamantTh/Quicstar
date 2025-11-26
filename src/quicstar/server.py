@@ -6,6 +6,7 @@ import platform
 import sys
 from importlib import import_module
 from typing import Any, Awaitable, Callable, Dict
+from datetime import datetime
 
 from hypercorn.asyncio import serve
 from hypercorn.config import Config as HypercornConfig
@@ -38,21 +39,28 @@ async def default_app(scope: Dict[str, Any], receive, send) -> None:
     if scope["type"] != "http":
         raise RuntimeError("default_app supports only HTTP scope.")
 
-    info = [
-        "Quicstar is running.",
-        f"Python: {sys.version.split()[0]}",
-        f"Platform: {platform.platform()}",
-        f"PID: {os.getpid()}",
-    ]
-    body = ("\n".join(info)).encode("utf-8")
+    path = scope.get("path", "/")
+    data = {
+        "status": "ok",
+        "python": sys.version.split()[0],
+        "platform": platform.platform(),
+        "pid": os.getpid(),
+        "time": datetime.utcnow().isoformat() + "Z",
+    }
+    if path == "/health":
+        body = b"ok"
+        headers = [(b"content-type", b"text/plain; charset=utf-8")]
+    else:
+        body = (
+            "Quicstar is running.\n"
+            f"Python: {data['python']}\n"
+            f"Platform: {data['platform']}\n"
+            f"PID: {data['pid']}\n"
+            f"Time: {data['time']}"
+        ).encode("utf-8")
+        headers = [(b"content-type", b"text/plain; charset=utf-8")]
 
-    await send(
-        {
-            "type": "http.response.start",
-            "status": 200,
-            "headers": [(b"content-type", b"text/plain; charset=utf-8")],
-        }
-    )
+    await send({"type": "http.response.start", "status": 200, "headers": headers})
     await send({"type": "http.response.body", "body": body})
 
 
@@ -77,6 +85,10 @@ def build_hypercorn_config(settings: QuicstarConfig) -> HypercornConfig:
         cfg.proxy_headers = True
     if settings.forwarded_allow_ips:
         cfg.forwarded_allow_ips = settings.forwarded_allow_ips
+    if settings.forwarded_allow_ips_file and settings.forwarded_allow_ips_file.exists():
+        cfg.forwarded_allow_ips = ",".join(
+            line.strip() for line in settings.forwarded_allow_ips_file.read_text().splitlines() if line.strip()
+        )
     if settings.keep_alive_timeout is not None:
         cfg.keep_alive_timeout = settings.keep_alive_timeout
     if settings.graceful_timeout is not None:

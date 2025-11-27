@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quicstar"
-version = "1.0.0"
+version = "1.0.1"
 description = "Lightweight, modern Python web server with HTTP/3 and flexible deployment"
-authors = [{name = "Quicstar Team"}]
+authors = [{name = "Thomas Winkelmann"}]
 readme = "README.md"
 license = { text = "LicenseRef-Quicstar-NSSL" }
 requires-python = ">=3.10"
@@ -20,6 +20,9 @@ classifiers = [
   "Framework :: AsyncIO",
   "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
 ]
+
+[project.urls]
+Profile = "https://git.diath.systems/DiamantTh"
 
 [project.scripts]
 quicstar = "quicstar.cli:main"

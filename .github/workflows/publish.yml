@@ -39,7 +39,7 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.GPR_USERNAME || github.actor }}
           TWINE_PASSWORD: ${{ secrets.GPR_TOKEN || secrets.GITHUB_TOKEN }}
-          TWINE_REPOSITORY_URL: ${{ vars.GPR_REPOSITORY_URL || 'https://upload.github.com' }}
+          TWINE_REPOSITORY_URL: ${{ vars.GPR_REPOSITORY_URL || format('https://upload.github.com/{0}', github.repository) }}
         run: |
           python -m pip install --upgrade pip twine
           twine upload --non-interactive --repository-url "$TWINE_REPOSITORY_URL" dist/*.whl

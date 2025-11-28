@@ -40,6 +40,20 @@ quicstar --app myproject.asgi:application --protocol auto --certfile /certs/full
 
 Die jeweilige Framework-Konfiguration (Settings, Logging etc.) bleibt unangetastet; Quicstar übernimmt nur das Serving.
 
+## Einbindung in bestehende Projekte
+1. **Quicstar als Abhängigkeit eintragen.** Installiere das Paket ins Virtualenv (`pip install quicstar`) oder trage es in `pyproject.toml` ein und sperre die Version wie gewohnt.
+2. **Eine ASGI-App bereitstellen.** Django, FastAPI, Starlette & Co. bringen bereits einen ASGI-Callable mit (z. B. `myproject.asgi:application`). Eigene Projekte exportieren ihr `app`-Objekt aus einem Modul.
+3. **Quicstar auf diesen Callable zeigen lassen.** Per `--app pfad.zum:callable` oder `QUICSTAR_APP` übergibst du den Einstiegspunkt. Alle übrigen Projekteinstellungen (Datenbank, Feature-Flags, Logging) bleiben dort, wo sie bisher schon lagen.
+4. **Binds/Protokolle je Umgebung setzen.** Lokal reicht `localhost:8000` plus `--protocol http1`. In Produktion nutzt du etwa `--bind 0.0.0.0:443 --protocol auto --certfile ... --keyfile ...` oder die entsprechenden `QUICSTAR_*`-Variablen. Im Container landet der CLI-Aufruf einfach im Image oder in deinem `docker-compose`-Service.
+5. **Optional Reload für Dev.** Mit `--reload` und `--reload-dirs` ersetzt Quicstar deinen bisherigen `uvicorn`/`hypercorn`-Dev-Server drop-in und beobachtet den Source-Tree.
+
+Damit bleibt der Rest deines Stacks unberührt: Django-Management-Commands, Middleware und bestehende Logging-Setups funktionieren unverändert, weil Quicstar ausschließlich die ASGI-Server-Schicht austauscht.
+
+## Standard-Endpunkte & Healthchecks
+- Ohne explizites `--app` liefert Quicstar seine interne `default_app` aus, die `/` (Status-Text) sowie `/health` (Plain `ok`) bereitstellt. `/health` eignet sich als Probe-Endpunkt für Container-Orchestrierung oder Load-Balancer.
+- Sobald du deine eigene ASGI-App angibst, bekommst du exakt deren Routen. Quicstar reicht die Requests nur durch – Versionierung, API-Prefixe oder WebSockets funktionieren identisch wie unter anderen ASGI-Servern.
+- Möchtest du weiterhin einen leichten Health-Endpunkt haben, häng ihn einfach in deine ASGI-App (z. B. zusätzliche Django-View) oder reserviere einen dedizierten `health`-Pfad, damit Proxies und Monitore eine stabile URL behalten.
+
 ## Konfiguration per TOML
 Siehe `examples/quicstar.example.toml` für eine menschenlesbare Konfiguration. Die Datei steuert ausschließlich den Standalone-Betrieb.
 

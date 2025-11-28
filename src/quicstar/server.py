@@ -37,6 +37,7 @@ def load_asgi_app(app_ref: Any) -> ASGIApp:
 
 
 async def default_app(scope: Dict[str, Any], receive, send) -> None:
+    """Fallback ASGI app providing `/` info text and `/health` for probes."""
     if scope["type"] != "http":
         raise RuntimeError("default_app supports only HTTP scope.")
 

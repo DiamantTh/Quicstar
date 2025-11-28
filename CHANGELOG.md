@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+- Documentiere/Document embedding steps and default endpoints in README (EN/DE) so integrators know how to wire Quicstar + what `/health` provides.
+- Clarify fallback `/` + `/health` behaviour in `default_app` docstring.
+
 ## 1.0.0
 - Promote stable release; features from snapshot `0.1.0-2fc930a` retained.
 
